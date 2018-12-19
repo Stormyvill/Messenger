@@ -117,20 +117,6 @@ CREATE TABLE `tbmessages` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `tbressetcredentials`
---
-
-CREATE TABLE `tbressetcredentials` (
-  `Id` int(11) NOT NULL,
-  `IdCredential` int(11) NOT NULL,
-  `Code` varchar(250) COLLATE utf8_czech_ci NOT NULL,
-  `ExpireDate` datetime NOT NULL,
-  `IsDeleted` tinyint(4) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
--- --------------------------------------------------------
-
---
 -- Struktura tabulky `tbseenmessages`
 --
 
@@ -139,21 +125,6 @@ CREATE TABLE `tbseenmessages` (
   `IdUser` int(11) NOT NULL,
   `IdMessage` int(11) NOT NULL,
   `SeenTime` datetime NOT NULL,
-  `IsDeleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
--- --------------------------------------------------------
-
---
--- Struktura tabulky `tbtokens`
---
-
-CREATE TABLE `tbtokens` (
-  `Id` int(11) NOT NULL,
-  `IdUser` int(11) NOT NULL,
-  `Token` varchar(250) COLLATE utf8_czech_ci NOT NULL,
-  `ValidTo` datetime NOT NULL,
-  `DeviceName` varchar(100) COLLATE utf8_czech_ci NOT NULL,
   `IsDeleted` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
@@ -202,15 +173,6 @@ ALTER TABLE `tbchatrooms`
   ADD UNIQUE KEY `Id_UNIQUE` (`Id`);
 
 --
--- Klíče pro tabulku `tbcredentials`
---
-ALTER TABLE `tbcredentials`
-  ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `Id_UNIQUE` (`Id`),
-  ADD UNIQUE KEY `LoginName_UNIQUE` (`LoginName`),
-  ADD KEY `IdUser_idx` (`IdUser`);
-
---
 -- Klíče pro tabulku `tbfriends`
 --
 ALTER TABLE `tbfriends`
@@ -237,15 +199,6 @@ ALTER TABLE `tbmessages`
   ADD KEY `FK_IdChat_Messages_idx` (`IdChatRoom`);
 
 --
--- Klíče pro tabulku `tbressetcredentials`
---
-ALTER TABLE `tbressetcredentials`
-  ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `Id_UNIQUE` (`Id`),
-  ADD UNIQUE KEY `Code_UNIQUE` (`Code`),
-  ADD KEY `FK_idx` (`IdCredential`);
-
---
 -- Klíče pro tabulku `tbseenmessages`
 --
 ALTER TABLE `tbseenmessages`
@@ -253,15 +206,6 @@ ALTER TABLE `tbseenmessages`
   ADD UNIQUE KEY `id_UNIQUE` (`Id`),
   ADD KEY `FK_IdUser_SeenMessages_idx` (`IdUser`),
   ADD KEY `FK_IdMessage_SeenMessages_idx` (`IdMessage`);
-
---
--- Klíče pro tabulku `tbtokens`
---
-ALTER TABLE `tbtokens`
-  ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `Id_UNIQUE` (`Id`),
-  ADD UNIQUE KEY `Token_UNIQUE` (`Token`),
-  ADD KEY `FK__idx` (`IdUser`);
 
 --
 -- Klíče pro tabulku `tbusers`
@@ -288,12 +232,6 @@ ALTER TABLE `tbchatrooms`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pro tabulku `tbcredentials`
---
-ALTER TABLE `tbcredentials`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT pro tabulku `tbfriends`
 --
 ALTER TABLE `tbfriends`
@@ -312,21 +250,9 @@ ALTER TABLE `tbmessages`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pro tabulku `tbressetcredentials`
---
-ALTER TABLE `tbressetcredentials`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT pro tabulku `tbseenmessages`
 --
 ALTER TABLE `tbseenmessages`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pro tabulku `tbtokens`
---
-ALTER TABLE `tbtokens`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -345,12 +271,6 @@ ALTER TABLE `tbusers`
 ALTER TABLE `tbchatmembers`
   ADD CONSTRAINT `FK_IdChat_ChatMembers` FOREIGN KEY (`IdChat`) REFERENCES `tbchatrooms` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `FK_IdUser_ChatMembers` FOREIGN KEY (`IdUser`) REFERENCES `tbusers` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Omezení pro tabulku `tbcredentials`
---
-ALTER TABLE `tbcredentials`
-  ADD CONSTRAINT `FK_IdUser_Credentials` FOREIGN KEY (`IdUser`) REFERENCES `tbusers` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Omezení pro tabulku `tbfriends`
@@ -373,23 +293,11 @@ ALTER TABLE `tbmessages`
   ADD CONSTRAINT `FK_IdUser_Messages` FOREIGN KEY (`IdUser`) REFERENCES `tbusers` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Omezení pro tabulku `tbressetcredentials`
---
-ALTER TABLE `tbressetcredentials`
-  ADD CONSTRAINT `FK_IdCredentials_tbCredentials` FOREIGN KEY (`IdCredential`) REFERENCES `tbcredentials` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
 -- Omezení pro tabulku `tbseenmessages`
 --
 ALTER TABLE `tbseenmessages`
   ADD CONSTRAINT `FK_IdMessage_SeenMessages` FOREIGN KEY (`IdMessage`) REFERENCES `tbmessages` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `FK_IdUser_SeenMessages` FOREIGN KEY (`IdUser`) REFERENCES `tbusers` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Omezení pro tabulku `tbtokens`
---
-ALTER TABLE `tbtokens`
-  ADD CONSTRAINT `FK_IdUser_Tokens` FOREIGN KEY (`IdUser`) REFERENCES `tbusers` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
