@@ -22,7 +22,7 @@ SET time_zone = "+00:00";
 -- Databáze: `messenger`
 --
 CREATE DATABASE IF NOT EXISTS `messenger` DEFAULT CHARACTER SET utf8 COLLATE utf8_czech_ci;
-USE `palmgroup`;
+USE `messenger`;
 
 -- --------------------------------------------------------
 
