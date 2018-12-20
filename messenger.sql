@@ -54,21 +54,6 @@ CREATE TABLE `tbchatrooms` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `tbcredentials`
---
-
-CREATE TABLE `tbcredentials` (
-  `Id` int(11) NOT NULL,
-  `IdUser` int(11) NOT NULL,
-  `LoginName` varchar(100) COLLATE utf8_czech_ci NOT NULL,
-  `Password` varchar(100) COLLATE utf8_czech_ci NOT NULL,
-  `IsTerminated` tinyint(4) NOT NULL,
-  `IsDeleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
--- --------------------------------------------------------
-
---
 -- Struktura tabulky `tbfriends`
 --
 
@@ -117,20 +102,6 @@ CREATE TABLE `tbmessages` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `tbseenmessages`
---
-
-CREATE TABLE `tbseenmessages` (
-  `Id` int(11) NOT NULL,
-  `IdUser` int(11) NOT NULL,
-  `IdMessage` int(11) NOT NULL,
-  `SeenTime` datetime NOT NULL,
-  `IsDeleted` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
--- --------------------------------------------------------
-
---
 -- Struktura tabulky `tbusers`
 --
 
@@ -150,7 +121,7 @@ CREATE TABLE `tbusers` (
 --
 
 INSERT INTO `tbusers` (`Id`, `Name`, `Surname`, `Email`, `ProfilePhoto`, `BornDate`, `Country`, `IsDeleted`) VALUES
-(1, 'Vojtěch', 'Štor', 'vojtastor32@gmail.com', 'není', '1999-05-19', 'Czech Republic', 0);
+(1, 'Kristián', 'Klíma', 'klimakristian@sssvt.cz', 'není', '1999-05-19', 'Czech Republic', 0);
 
 --
 -- Klíče pro exportované tabulky
@@ -199,15 +170,6 @@ ALTER TABLE `tbmessages`
   ADD KEY `FK_IdChat_Messages_idx` (`IdChatRoom`);
 
 --
--- Klíče pro tabulku `tbseenmessages`
---
-ALTER TABLE `tbseenmessages`
-  ADD PRIMARY KEY (`Id`),
-  ADD UNIQUE KEY `id_UNIQUE` (`Id`),
-  ADD KEY `FK_IdUser_SeenMessages_idx` (`IdUser`),
-  ADD KEY `FK_IdMessage_SeenMessages_idx` (`IdMessage`);
-
---
 -- Klíče pro tabulku `tbusers`
 --
 ALTER TABLE `tbusers`
@@ -250,12 +212,6 @@ ALTER TABLE `tbmessages`
   MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pro tabulku `tbseenmessages`
---
-ALTER TABLE `tbseenmessages`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT pro tabulku `tbusers`
 --
 ALTER TABLE `tbusers`
@@ -292,12 +248,6 @@ ALTER TABLE `tbmessages`
   ADD CONSTRAINT `FK_IdChat_Messages` FOREIGN KEY (`IdChatRoom`) REFERENCES `tbchatrooms` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `FK_IdUser_Messages` FOREIGN KEY (`IdUser`) REFERENCES `tbusers` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
---
--- Omezení pro tabulku `tbseenmessages`
---
-ALTER TABLE `tbseenmessages`
-  ADD CONSTRAINT `FK_IdMessage_SeenMessages` FOREIGN KEY (`IdMessage`) REFERENCES `tbmessages` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_IdUser_SeenMessages` FOREIGN KEY (`IdUser`) REFERENCES `tbusers` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
